@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PomodoroTodo - Boost Your Productivity</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">PomodoroTodo</h1>
+            <button class="theme-toggle" id="themeToggle">
+                <i data-feather="sun"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h2 class="hero-title">Welcome to <span class="highlight">PomodoroTodo</span></h2>
+                <p class="hero-subtitle">
+                    Boost your productivity with our powerful combination of Pomodoro timer
+                    and todo list management.
+                </p>
+            </section>
+
+            <!-- Feature Cards -->
+            <section class="features">
+                <div class="feature-card" id="pomodoroCard">
+                    <div class="feature-icon">
+                        <i data-feather="clock" class="icon-large"></i>
+                    </div>
+                    <h3 class="feature-title">Pomodoro Timer</h3>
+                    <p class="feature-description">
+                        Stay focused with customizable Pomodoro sessions, short breaks, and long breaks.
+                    </p>
+                </div>
+
+                <div class="feature-card" id="todoCard">
+                    <div class="feature-icon">
+                        <i data-feather="list" class="icon-large"></i>
+                    </div>
+                    <h3 class="feature-title">Todo Management</h3>
+                    <p class="feature-description">
+                        Organize your tasks efficiently with our intuitive todo list feature.
+                    </p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Pomodoro Timer Modal -->
+    <div class="modal-overlay" id="pomodoroModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Pomodoro Timer</h3>
+                <button class="close-btn" id="closePomodoroModal">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="timer-display">
+                    <div class="timer-circle">
+                        <svg class="progress-ring" width="200" height="200">
+                            <circle class="progress-ring-circle" cx="100" cy="100" r="90" 
+                                    fill="transparent" stroke="#e2e8f0" stroke-width="8"/>
+                            <circle class="progress-ring-progress" cx="100" cy="100" r="90" 
+                                    fill="transparent" stroke="#3b82f6" stroke-width="8"/>
+                        </svg>
+                        <div class="timer-text">
+                            <div class="timer-time" id="timerDisplay">25:00</div>
+                            <div class="timer-session" id="sessionType">Work Session</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timer-controls">
+                    <button class="btn btn-primary" id="startPauseBtn">Start</button>
+                    <button class="btn btn-secondary" id="resetBtn">Reset</button>
+                </div>
+                <div class="timer-settings">
+                    <div class="setting-group">
+                        <label>Work Duration (minutes)</label>
+                        <input type="number" id="workDuration" value="25" min="1" max="60">
+                    </div>
+                    <div class="setting-group">
+                        <label>Short Break (minutes)</label>
+                        <input type="number" id="shortBreak" value="5" min="1" max="30">
+                    </div>
+                    <div class="setting-group">
+                        <label>Long Break (minutes)</label>
+                        <input type="number" id="longBreak" value="15" min="1" max="60">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Todo List Modal -->
+    <div class="modal-overlay" id="todoModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Todo List</h3>
+                <button class="close-btn" id="closeTodoModal">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="todo-input">
+                    <input type="text" id="todoInput" placeholder="Add a new task...">
+                    <button class="btn btn-primary" id="addTodoBtn">
+                        <i data-feather="plus"></i>
+                        Add Task
+                    </button>
+                </div>
+                <div class="todo-list" id="todoList">
+                    <!-- Todo items will be dynamically added here -->
+                </div>
+                <div class="todo-stats">
+                    <span id="todoStats">0 tasks remaining</span>
+                    <button class="btn btn-secondary btn-small" id="clearCompletedBtn">
+                        Clear Completed
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio for timer notifications -->
+    <audio id="timerSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeAjuM1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeAjuM1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeAjuM1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeAjuM1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeAjuM1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeAjuM1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeAjuM1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeAjuM1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeAjuM1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeAjuM1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeAjuM1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeAjuM1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeAjuM1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeAjuM1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeAjuM1/LNeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeAjuM1/LNeSsFJHfH8N2QQAoUXrTp66hVFA==" type="audio/wav">
+    </audio>
+
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="script.js"></script>
+</body>
+</html>
